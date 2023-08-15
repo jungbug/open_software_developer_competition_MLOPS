@@ -18,6 +18,10 @@ def predict():
         return jsonify({"result": prediction})
     else:
         return jsonify({"error": "Image file is missing or invalid."}), 400
+    
+@app.route('/')
+def index():
+    return 'server is running'
 
 if __name__ == '__main__':
     app.run()
