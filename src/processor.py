@@ -1,5 +1,6 @@
 import io
 import json
+from concurrent.futures import ThreadPoolExecutor
 
 import tensorflow as tf
 import tensorflow_hub as hub
@@ -19,9 +20,14 @@ class ProcessorFood():
         with open('data/class_map.json', 'r', encoding='utf-8') as file:
             self.class_map = json.load(file)
 
+    def parallelProcessImage(self, images):
+        with ThreadPoolExecutor() as executor:
+            processed = list(executor.map(self.preProcessImage, images))
+        return processed
+
     def preProcessImage(self, images):
         preImage = Image.open(io.BytesIO(images)).resize((250, 250))
-        preImage = np.array(preImage) / 255.0
+        preImage = np.array(preImage, dtype=np.float32) / 255.0
 
         return np.expand_dims(preImage, axis=0)
     
