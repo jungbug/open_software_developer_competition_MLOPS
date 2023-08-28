@@ -19,22 +19,46 @@ class ProcessorFood():
 
         with open('data/class_map.json', 'r', encoding='utf-8') as file:
             self.class_map = json.load(file)
+        self.class_map = {v: k for k, v in self.class_map.items()}
 
     def parallelProcessImage(self, images):
-        with ThreadPoolExecutor() as executor:
-            processed = list(executor.map(self.preProcessImage, images))
-        return processed
+        try:
+            with ThreadPoolExecutor() as executor:
+                processed = list(executor.map(self.preProcessImage, images))
+            return processed
+        except Exception as e:
+            print(str(e))
+            return str(e)
 
     def preProcessImage(self, images):
-        preImage = Image.open(io.BytesIO(images)).resize((250, 250))
-        preImage = np.array(preImage, dtype=np.float32) / 255.0
+        try:
+            if isinstance(images, str):
+                with open(images, 'rb') as f:
+                    image_data = f.read()
+                preImage = Image.open(io.BytesIO(image_data)).resize((250, 250))
+            else:
+                preImage = Image.open(io.BytesIO(images)).resize((250, 250))
+            preImage = np.array(preImage, dtype=np.float32) / 255.0
 
-        return np.expand_dims(preImage, axis=0)
+            return np.expand_dims(preImage, axis=0)
+        except Exception as e:
+            return str(e)
     
     def postProcessImage(self, predicted):
-        return self.class_map[np.argmax(predicted)]
+        try:
+            key = np.argmax(predicted)
+            if key in self.class_map:
+                decoded = str(self.class_map[key])
+
+                return decoded
+            else:
+                print(f"Key {key} not found in class_map")
+                return "Key not found in class_map"
+        except Exception as e:
+            return str(e)
+
     
-    def predictImage(self, fileName):
-        processed = self.preProcessImage(fileName)
+    def predictImage(self, imageData):
+        processed = self.preProcessImage(imageData)
         predicted = self.model.predict(processed)
         return self.postProcessImage(predicted)
