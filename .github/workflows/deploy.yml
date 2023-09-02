@@ -27,6 +27,8 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_SSH_USER }}@${{ secrets.EC2_HOST }} "cd ~/backend-MLOps && git pull origin master && sudo systemctl restart mlops"
+          echo "$PRIVATE_KEY" > private_key.pem
+          chmod 600 private_key.pem
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ${{ secrets.EC2_SSH_USER }}@${{ secrets.EC2_HOST }} "cd ~/backend-MLOps && git pull origin master && sudo systemctl restart mlops"
         env:
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
