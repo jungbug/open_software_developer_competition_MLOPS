@@ -28,3 +28,5 @@ jobs:
       - name: Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_SSH_USER }}@${{ secrets.EC2_HOST }} "cd ~/backend-MLOps && git pull origin master && sudo systemctl restart mlops"
+        env:
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
