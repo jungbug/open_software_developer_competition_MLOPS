@@ -37,4 +37,6 @@ Temporary Items
 # End of https://www.toptal.com/developers/gitignore/api/macos
 /bin
 /lib
+/Scripts
+*__pycache__*
 .gitignore

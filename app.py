@@ -17,8 +17,9 @@ def predict():
         image_file = request.files.get('image')
         processor = ProcessorFood()
         if image_file and isinstance(image_file, FileStorage) and image_file.filename.endswith(('.jpg', '.jpeg', '.png')):
+            tempDir = tempfile.gettempdir()
             image_path = os.path.join(
-                "/tmp", secure_filename("temp_image.jpg"))
+                tempDir, secure_filename("temp_image.jpg"))
             image_file.save(image_path)
 
             with open(image_path, 'rb') as f:

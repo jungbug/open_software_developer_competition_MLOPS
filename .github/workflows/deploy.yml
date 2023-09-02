@@ -24,3 +24,7 @@ jobs:
 
       - name: Push Docker Compose Services
         run: docker push lavi02/healthwatch-mlops:latest
+
+      - name: Deploy to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.EC2_SSH_USER }}@${{ secrets.EC2_HOST }} "cd ~/backend-MLOps && git pull origin master && sudo systemctl restart mlops"
