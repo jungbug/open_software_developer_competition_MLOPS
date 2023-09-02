@@ -6,7 +6,8 @@ import tensorflow as tf
 import tensorflow_hub as hub
 
 import numpy as np
-from PIL import Image
+import cv2
+
 
 class ProcessorFood():
     def __init__(self) -> None:
@@ -35,15 +36,22 @@ class ProcessorFood():
             if isinstance(images, str):
                 with open(images, 'rb') as f:
                     image_data = f.read()
-                preImage = Image.open(io.BytesIO(image_data)).resize((250, 250))
+                nparr = np.frombuffer(image_data, np.uint8)
+                preImage = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
             else:
-                preImage = Image.open(io.BytesIO(images)).resize((250, 250))
-            preImage = np.array(preImage, dtype=np.float32) / 255.0
+                nparr = np.frombuffer(images, np.uint8)
+                preImage = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+
+            resizedImage = cv2.resize(preImage, (250, 250))
+            preImage = np.array(resizedImage, dtype=np.float32) / 255.0
+
+            if preImage is None:
+                return None
 
             return np.expand_dims(preImage, axis=0)
         except Exception as e:
             return str(e)
-    
+
     def postProcessImage(self, predicted):
         try:
             key = np.argmax(predicted)
@@ -57,7 +65,6 @@ class ProcessorFood():
         except Exception as e:
             return str(e)
 
-    
     def predictImage(self, imageData):
         processed = self.preProcessImage(imageData)
         predicted = self.model.predict(processed)

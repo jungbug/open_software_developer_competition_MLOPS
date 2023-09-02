@@ -32,8 +32,6 @@ class ProcessorPose():
 
     def preProcessImage(self, images):
         try:
-            print(f"Type of images: {type(images)}")
-
             if isinstance(images, str):
                 with open(images, 'rb') as f:
                     image_data = f.read()
