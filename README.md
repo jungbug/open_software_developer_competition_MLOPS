@@ -1,4 +1,4 @@
-# food_classification
+# MLops
 tested: ![Tested](https://img.shields.io/badge/Arch_Linux-1793D1?style=for-the-badge&logo=arch-linux&logoColor=white)  ![Tested](https://img.shields.io/badge/Debian-A81D33?style=for-the-badge&logo=debian&logoColor=white)  ![Tested](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white)  
   
 ![](https://img.shields.io/badge/python-3.8-blue) ![](https://img.shields.io/badge/Flask-000000?style=flat-square&logo=flask&logoColor=white) ![](https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white)   
